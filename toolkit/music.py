@@ -18,12 +18,14 @@ spec.json
     {"from": 2,   "to": 6,  "type": "pad"},      chords + slow arpeggio, no drums
     {"from": 6,   "to": 10, "type": "full"},     four-on-the-floor, clap, bass, fast arpeggio
     {"from": 10,  "to": 12, "type": "half"},     kick on 1 and 3
-    {"from": 0,   "to": 4,  "type": "dark"},     minor drone + bass pulse, tense
+    {"from": 0,   "to": 4,  "type": "soft"},     warm chords + electric piano, no drums (calm, not tense)
+    {"from": 0,   "to": 4,  "type": "dark"},     minor drone + bass pulse (film-trailer feel: use sparingly)
     {"from": 12,  "to": 15, "type": "final"}     big held chord with sparkle
   ],
   "lead": [[6, 10]],         spans where a bell melody plays over the groove
   "hits": [                  one-shots, at exact picture times
-    {"t": 2.0, "fx": "impact"},                  impact | tick | pop | buzz | whoosh | riser | down | bell | chime | roll
+    {"t": 2.0, "fx": "soft"},                    gentle set (default): soft | nope | tick | pop | whoosh | bell | chime | roll
+                                                 cinematic set (sounds like a film trailer): impact | buzz | riser | down
     {"t": 1.0, "fx": "riser", "len": 1.0, "gain": 0.5, "pan": 0.2},
     {"t": 5.0, "fx": "bell", "note": 81}
   ]
@@ -155,6 +157,22 @@ def impact():
     return np.tanh(1.4 * boom) + lp(rng.standard_normal(n), 2600) * np.exp(-t / 0.09) * 0.5
 
 
+def soft_thud():
+    """Gentle low landing for cuts: a short round sine, no noise, no long tail."""
+    n = int(0.5 * SR)
+    t = np.arange(n) / SR
+    return np.sin(2 * np.pi * np.cumsum(62 + 40 * np.exp(-t / 0.03)) / SR) * np.exp(-t / 0.13)
+
+
+def epiano(note, length=1.4):
+    """Warm electric-piano tone: sine with a soft bell partial."""
+    n = int(length * SR)
+    t = np.arange(n) / SR
+    f = hz(note)
+    x = np.sin(2 * np.pi * f * t) + 0.3 * np.sin(2 * np.pi * 2 * f * t) * np.exp(-t / 0.25) + 0.12 * np.sin(2 * np.pi * 4 * f * t) * np.exp(-t / 0.06)
+    return x * env(n, 0.005, length * 0.5, curve=3.0)
+
+
 def tick():
     n = int(0.03 * SR)
     t = np.arange(n) / SR
@@ -191,9 +209,9 @@ def inside(t, ss):
     return any(a - 1e-6 <= t < b - 1e-6 for a, b in ss)
 
 
-FULL, HALF, PAD, DARK, FINAL, RUMBLE = (spans(k) for k in ('full', 'half', 'pad', 'dark', 'final', 'rumble'))
+FULL, HALF, PAD, DARK, FINAL, RUMBLE, SOFT = (spans(k) for k in ('full', 'half', 'pad', 'dark', 'final', 'rumble', 'soft'))
 LEAD = [tuple(x) for x in spec.get('lead', [])]
-drums, bassT, padT, arpT, leadT, fx = (np.zeros((N, 2)) for _ in range(6))
+drums, bassT, padT, arpT, leadT, fx, keysT = (np.zeros((N, 2)) for _ in range(7))
 K, C, H, HO = kick(), clap(), hat(0.025), hat(0.07)
 kick_times = []
 
@@ -203,9 +221,9 @@ for b in range(int(DUR / BEAT) + 1):
     ch = CHORDS[(b // 4) % 4]
     full, half = inside(t, FULL), inside(t, HALF)
     if full or (half and beat in (0, 2)):
-        put(drums, K, t, 0.95); kick_times.append(t)
+        put(drums, K, t, 0.62); kick_times.append(t)
     if full and beat in (1, 3):
-        put(drums, C, t, 0.5)
+        put(drums, C, t, 0.26)
     if full or half:
         put(drums, HO, t + BEAT / 2, 0.16, 0.25)
         for s in (0, 0.25, 0.75):
@@ -228,6 +246,19 @@ for bar in range(int(DUR / BAR) + 1):
     ch = CHORDS[bar % 4]
     if inside(t, FULL) or inside(t, HALF) or inside(t, PAD):
         put(padT, pad_chord(ch['pad'], BAR + 0.15, 1900 if inside(t, FULL) else 1300), t, 0.5)
+    soft = inside(t, SOFT)
+    if soft:
+        put(padT, pad_chord(ch['pad'], BAR + 0.15, 1000), t, 0.42)
+    if soft or inside(t, PAD) or inside(t, HALF) or inside(t, FULL):
+        # electric piano: the chord rolled on beat 1, answered on the "and" of beat 3
+        g = 0.2 if soft else 0.13
+        for k, note in enumerate(ch['pad']):
+            put(keysT, epiano(note + 12, 1.6), t + k * 0.035, g, -0.3 + 0.2 * k)
+        for k, note in enumerate(ch['pad'][1:]):
+            put(keysT, epiano(note + 12, 1.1), t + BEAT * 2.5 + k * 0.03, g * 0.7, 0.3 - 0.2 * k)
+        if soft:
+            for k in range(4):
+                put(arpT, pluck(ch['arp'][ARP[(bar * 4 + k) % len(ARP)]], 0.4, 2400), t + k * BEAT, 0.16, 0.4 if k % 2 else -0.4)
     if inside(t, LEAD):
         for off, note, ln in ch['lead']:
             put(leadT, bell(note, ln * BEAT + 0.5), t + off * BEAT, 0.16, 0.15)
@@ -239,8 +270,10 @@ for a, b in RUMBLE:
     put(fx, lp(rng.standard_normal(n), 180) * np.linspace(0.3, 1, n), a, 0.5)
     put(bassT, bass_note(26, b - a), a + 0.05, 0.4)
 for a, b in FINAL:
-    put(padT, pad_chord([38, 50, 54, 57, 62, 66], b - a + 0.1, 2000), a, 0.9)
-    put(bassT, bass_note(26, min(3.5, b - a)), a, 0.55)
+    put(padT, pad_chord([38, 50, 54, 57, 62, 66], b - a + 0.1, 1500), a, 0.7)
+    put(bassT, bass_note(38, min(2.5, b - a)), a, 0.3)
+    for k, note in enumerate([62, 66, 69, 74]):
+        put(keysT, epiano(note, 2.6), a + k * 0.05, 0.22, -0.3 + 0.2 * k)
     for k, note in enumerate([74, 78, 81, 86, 90]):
         put(leadT, bell(note, 2.4), a + min(2.5, (b - a) * 0.55) + k * 0.09, 0.14, -0.4 + 0.2 * k)
 
@@ -249,6 +282,11 @@ for h in spec.get('hits', []):
     t, kind, g, pan, ln = h['t'], h['fx'], h.get('gain'), h.get('pan', 0.0), h.get('len', 0.6)
     if kind == 'impact':
         put(fx, impact(), t, g or 0.85, pan)
+    elif kind == 'soft':
+        put(fx, soft_thud(), t, g or 0.45, pan)
+    elif kind == 'nope':
+        n0 = h.get('note', 69)
+        put(keysT, epiano(n0, 0.5), t, g or 0.4, pan); put(keysT, epiano(n0 - 4, 0.8), t + 0.2, g or 0.4, pan)
     elif kind == 'tick':
         put(fx, tick(), t, g or 0.6, pan)
     elif kind == 'pop':
@@ -300,14 +338,15 @@ for t in kick_times:
     i = int(t * SR)
     n = min(int(0.3 * SR), N - i)
     if n > 0:
-        duck[i:i + n] = np.minimum(duck[i:i + n], 1 - 0.62 * np.exp(-np.arange(n) / SR / 0.11))
+        duck[i:i + n] = np.minimum(duck[i:i + n], 1 - 0.38 * np.exp(-np.arange(n) / SR / 0.11))
 duck = duck[:, None]
 
 arpT = reverb(delay(arpT, BEAT * 0.75, 0.42, 0.55), 2.0, 0.22)
 leadT = reverb(delay(leadT, BEAT * 0.75, 0.4, 0.4), 2.8, 0.4)
 padT = reverb(padT, 3.0, 0.35)
-fx = reverb(fx, 2.4, 0.3)
-mix = hp(drums * 0.9 + (bassT * 0.8 + padT + arpT * 0.9 + leadT * 0.9) * duck + fx * 0.8, 28)
+fx = reverb(fx, 1.6, 0.18)
+keysT = reverb(keysT, 2.4, 0.3)
+mix = hp(drums * 0.9 + (bassT * 0.8 + padT + arpT * 0.9 + leadT * 0.9 + keysT) * duck + fx * 0.8, 28)
 
 k = int(float(spec.get('fade_out', 1.4)) * SR)
 if k > 0:
