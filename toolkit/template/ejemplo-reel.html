@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reel 01 · La doble reserva</title>
+<link rel="stylesheet" href="shared/reel.css">
+<style>
+/* Ángulo: miedo. Todo en oscuro hasta el cierre. */
+#a .clock { font-family: var(--mono); font-weight: 500; font-size: 250px; letter-spacing: -.05em; line-height: 1; color: var(--sol); margin-top: 26px; font-variant-numeric: tabular-nums; }
+#a h1 { font-size: 142px; margin-top: 70px; }
+
+#b .cap { position: relative; height: 330px; margin-top: 46px; }
+#b .cap h3 { position: absolute; left: 0; top: 0; width: 100%; font-size: 88px; }
+#b .strip { position: relative; margin-top: 30px; }
+#b .days { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--g); --g: 10px; margin-top: 26px; }
+#b .days > i { position: relative; font-style: normal; font-family: var(--mono); font-size: 30px; color: var(--soft); border: 1.5px solid rgba(251,249,244,.18); border-radius: 16px; height: 300px; padding: 16px 0 0 16px; }
+#b .days > i u { position: absolute; left: 14px; bottom: 150px; width: 34px; height: 34px; border-radius: 50%; background: var(--sol); text-decoration: none; }
+#b .days > i u::after { content: ""; position: absolute; left: 11px; top: 6px; width: 9px; height: 16px; border: solid var(--ink); border-width: 0 4px 4px 0; transform: rotate(42deg); }
+#b .lane { position: absolute; left: 0; right: 0; bottom: 26px; height: 108px; --g: 10px; }
+.bar { position: absolute; top: 0; height: 100%; border-radius: 16px; display: flex; align-items: center; padding: 0 22px; font-family: var(--display); font-weight: 600; font-size: 34px; letter-spacing: -.02em; white-space: nowrap; }
+#bar1 { left: calc(2 * (100% + var(--g)) / 8); width: calc(4 * (100% + var(--g)) / 8 - var(--g)); background: var(--blue); color: #fff; transform-origin: 0 50%; }
+#bar2 { left: calc(4 * (100% + var(--g)) / 8); width: calc(4 * (100% + var(--g)) / 8 - var(--g)); border: 4px dashed var(--sol); color: var(--sol); background: rgba(242,201,76,.16); justify-content: flex-end; }
+#clash { position: absolute; top: -10px; bottom: -10px; left: calc(4 * (100% + var(--g)) / 8 - 8px); width: calc(2 * (100% + var(--g)) / 8 - var(--g) + 16px); border-radius: 22px; border: 5px solid var(--sol); }
+
+#c h2 { font-size: 150px; margin-top: 50px; }
+#c p { font-size: 44px; line-height: 1.28; color: var(--soft); margin-top: 60px; max-width: 880px; }
+#c p b { color: var(--paper); font-weight: 500; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="scene dark" id="a">
+    <div class="blob s" style="width:760px;height:760px;right:-320px;top:-200px"></div>
+    <div class="safe col center">
+      <div class="eyebrow"><i class="dot sol"></i>Viernes a la noche</div>
+      <div class="clock">23:40</div>
+      <h1><span class="ln"><span>Dos familias.</span></span><span class="ln"><span class="mute"><em>Una cabaña.</em></span></span></h1>
+    </div>
+  </section>
+
+  <section class="scene dark" id="b">
+    <div class="blob b" style="width:800px;height:800px;left:-360px;bottom:-200px"></div>
+    <div class="safe col center">
+      <div class="eyebrow"><i class="dot sol"></i>La garantía</div>
+      <div class="cap">
+        <h3 id="cap1">Martina reservó del 12 al 16.</h3>
+        <h3 id="cap2">Llega otro pedido. <span class="sol">Las mismas noches.</span></h3>
+        <h3 id="cap3">El sistema <span class="sol">rechaza una.</span></h3>
+      </div>
+      <div class="strip">
+        <div class="eyebrow" style="font-size:21px">Cabaña del Bosque · Septiembre</div>
+        <div class="days"><i>10</i><i>11</i><i>12<u></u></i><i>13<u></u></i><i>14<u></u></i><i>15<u></u></i><i>16</i><i>17</i></div>
+        <div class="lane">
+          <div class="bar" id="bar1">Martina</div>
+          <div id="clash"></div>
+          <div class="bar" id="bar2">Otro pedido</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene dark" id="c">
+    <div class="blob s" style="width:700px;height:700px;left:-300px;top:-100px"></div>
+    <div class="blob b" style="width:700px;height:700px;right:-300px;bottom:100px"></div>
+    <div class="safe col center">
+      <div class="eyebrow"><i class="dot sol"></i>Operon Reservas</div>
+      <h2>
+        <span class="ln"><span>No podés</span></span>
+        <span class="ln"><span>vender</span></span>
+        <span class="ln"><span><span class="struck sol">dos veces<b style="background:var(--paper)"></b></span></span></span>
+        <span class="ln"><span>la misma</span></span>
+        <span class="ln"><span>noche.</span></span>
+      </h2>
+      <p>El sistema <b>no acepta guardar</b> dos estadías que compartan una noche.</p>
+    </div>
+  </section>
+
+  <section class="scene paper" id="end">
+    <div class="blob b" style="width:800px;height:800px;right:-300px;top:-200px"></div>
+    <div class="blob s" style="width:760px;height:760px;left:-320px;bottom:-200px"></div>
+    <div class="lockup"><svg viewBox="0 0 56 78"><circle class="lo-c" cx="28" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="5.4" pathLength="1" stroke-dasharray="1" transform="rotate(-90 28 24)"/><path class="lo-t" d="M22 45 L34 45 L28 53 Z" fill="currentColor"/><path class="lo-s" d="M28 53 C 24 61, 35 64, 30 78" fill="none" stroke="currentColor" stroke-width="3.35" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/></svg><span class="lo-w">peron</span><small class="lo-w">RESERVAS</small></div>
+    <h2><span class="ln"><span>Sin doble</span></span><span class="ln"><span class="blue"><em>reserva.</em></span></span></h2>
+    <div class="eyebrow"><i class="dot"></i>Demo abierta · sin registro</div>
+    <div class="btn">Ver la demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M13 5l7 7-7 7"/></svg></div>
+    <div class="url">operonhub.com/reservas</div>
+  </section>
+</div>
+
+<script src="assets/gsap.min.js"></script>
+<script src="shared/reel.js"></script>
+<script>
+Reel.start({ duration: 15, build(T, h) {
+  /* A · 0 → 2.5 · gancho */
+  h.up('#a .eyebrow', 0.05, { y: 16, d: 0.35 });
+  T.fromTo('#a .clock', { autoAlpha: 0, scale: 1.25, transformOrigin: '0% 50%' }, { autoAlpha: 1, scale: 1, duration: 0.55, ease: 'power4.out' }, 0.08);
+  h.linesIn('#a h1 .ln > span', 0.5, { s: 0.45, d: 0.6 });
+  T.to('#a .clock', { scale: 1.04, duration: 1.6, ease: 'none', transformOrigin: '0% 50%' }, 0.7);
+  h.linesOut('#a h1 .ln > span', 2.25);
+  h.out('#a .clock, #a .eyebrow', 2.3);
+
+  /* B · 2.5 → 7.6 · el choque */
+  h.show('#b', 2.5); h.hide('#a', 2.75);
+  h.up('#b .safe > .eyebrow', 2.55, { y: 16, d: 0.35 });
+  h.up('#b .strip .eyebrow', 2.6, { y: 16, d: 0.35 });
+  T.fromTo('#b .days > i', { autoAlpha: 0, y: 50 }, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.04 }, 2.6);
+  T.set('#b .days u', { scale: 0 }, 0);
+  h.up('#cap1', 2.85, { y: 30, d: 0.5 });
+  T.fromTo('#bar1', { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: 'power3.inOut' }, 3.05);
+  T.to('#cap1', { autoAlpha: 0, y: -26, duration: 0.3, ease: 'power2.in' }, 4.15);
+  h.up('#cap2', 4.35, { y: 30, d: 0.45 });
+  T.fromTo('#bar2', { autoAlpha: 0, x: 620, y: 0, rotation: 0 }, { autoAlpha: 1, x: 0, duration: 0.55, ease: 'power3.in' }, 4.5);
+  T.fromTo('#clash', { autoAlpha: 0, scale: 1.3 }, { autoAlpha: 1, scale: 1, duration: 0.16, ease: 'power2.out' }, 5.03);
+  T.to('#bar2', { x: 18, duration: 0.05, yoyo: true, repeat: 7, ease: 'none' }, 5.07);
+  T.to('#bar1', { scale: 1.04, duration: 0.13, yoyo: true, repeat: 1, ease: 'power1.inOut', transformOrigin: '50% 50%' }, 5.05);
+  T.to('#b .strip', { x: -10, duration: 0.05, yoyo: true, repeat: 5, ease: 'none' }, 5.05);
+  T.to('#clash', { autoAlpha: 0, duration: 0.25 }, 5.5);
+  T.to('#bar2', { x: 300, y: 420, rotation: 16, autoAlpha: 0, duration: 0.6, ease: 'power2.in' }, 5.5);
+  T.to('#cap2', { autoAlpha: 0, y: -26, duration: 0.3, ease: 'power2.in' }, 5.45);
+  h.up('#cap3', 5.7, { y: 30, d: 0.5 });
+  T.to('#b .days u', { scale: 1, duration: 0.35, stagger: 0.09, ease: 'back.out(2.4)' }, 6.05);
+  h.out('#b .safe > *', 7.35, { s: 0.04 });
+
+  /* C · 7.6 → 11.3 · la promesa */
+  h.show('#c', 7.55); h.hide('#b', 7.8);
+  h.up('#c .eyebrow', 7.6, { y: 16, d: 0.35 });
+  h.linesIn('#c h2 .ln > span', 7.6, { s: 0.09, d: 0.7 });
+  h.strike('#c .struck b', 8.55, { d: 0.42 });
+  h.up('#c p', 9.0, { y: 30 });
+
+  h.endCard(11.3);
+} });
+</script>
+</body>
+</html>

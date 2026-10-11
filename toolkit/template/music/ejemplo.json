@@ -1,0 +1,6 @@
+{"duration":15,"bpm":120,"transpose":-2,"progression":"minor","seed":11,"fade_out":1.4,
+ "sections":[{"from":0,"to":7.5,"type":"dark"},{"from":8,"to":11.3,"type":"pad"},{"from":11.3,"to":15,"type":"final"}],
+ "hits":[{"t":0.08,"fx":"impact","gain":0.8},{"t":0.5,"fx":"tick"},{"t":0.95,"fx":"tick"},{"t":2.25,"fx":"whoosh","len":0.5},
+ {"t":3.05,"fx":"whoosh","len":0.55,"pan":-0.3},{"t":4.45,"fx":"riser","len":0.6,"pan":0.5},{"t":5.03,"fx":"buzz"},{"t":5.5,"fx":"down","len":0.6,"pan":0.5},
+ {"t":5.7,"fx":"bell","note":78},{"t":6.05,"fx":"pop"},{"t":6.14,"fx":"pop","pitch":900},{"t":6.23,"fx":"pop","pitch":980},{"t":6.32,"fx":"pop","pitch":1060},
+ {"t":7.55,"fx":"impact","gain":0.7},{"t":8.55,"fx":"whoosh","len":0.4},{"t":10.3,"fx":"riser","len":0.95},{"t":11.3,"fx":"impact","gain":1.0},{"t":12.35,"fx":"pop"}]}
