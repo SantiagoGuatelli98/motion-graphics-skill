@@ -54,7 +54,14 @@ aspiracional: "Confirmar a mano a las 23:40", "«Che, ¿el 14 está libre?»". N
 
 - **Operon Reservas** — motor de reservas para cabañas y alojamientos chicos. Ángulos ya usados: doble reserva
   (miedo), comisión (plata), Tu zona este mes (anticipación), se vende solo (tiempo), panel en el bolsillo (control).
-- **Operon Agencia** — pendiente de relevar.
+- **Operon Agencia** — automatizaciones, SaaS y software a medida para pymes (operonhub.com). Cierre: "Agendar una
+  llamada →" o "Contanos tu proceso →" y `operonhub.com`; el logo va sin la palabra RESERVAS. Ángulos ya usados:
+  caso Virex (agente de IA que agenda), showreel de webs en producción, caso Aberturas FAR (Lighthouse 99/100),
+  caso Papelera Roma (5.949 precios, un clic) y automatizaciones (lead.in → crm.sync → wa.notify → stripe.paid).
+  No usar Nutri Studio ni Costito.
+- **Capturas de clientes**: Virex solo en modo demo. La app local de Virex puede estar conectada a la base real:
+  no capturarla sin confirmar que muestra datos de ejemplo. Papelera Roma, solo desde `?preview=1` en localhost y
+  sin mostrar su lista de precios.
 
 ## Frases aprobadas (de la web)
 

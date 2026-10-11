@@ -18,7 +18,7 @@ html, body { height: 100%; background: #0b0a08; overflow: hidden; }
 #guides { position: absolute; inset: var(--safe-top) 0 var(--safe-bottom) 0; border: 3px dashed #ff3b6b; z-index: 99; pointer-events: none; display: none; }
 body.guides #guides { display: block; }
 
-.scene { position: absolute; inset: 0; overflow: hidden; }
+.scene { position: absolute; inset: 0; overflow: hidden; isolation: isolate; }
 .paper { background: var(--paper); }
 .cream { background: var(--cream); }
 .dark { background: var(--ink); color: var(--paper); }
